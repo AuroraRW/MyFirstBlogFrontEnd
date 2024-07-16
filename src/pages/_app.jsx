@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { UserProvider } from '@auth0/nextjs-auth0/client';
+import { UserProvider } from '@auth0/nextjs-auth0/client'
 
 import { Header } from '@/components/Header'
 import { Footer } from '@/components/Footer'

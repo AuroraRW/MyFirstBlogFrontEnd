@@ -6,7 +6,7 @@
  */
 export const isHyperlink = (input) => {
   try {
-    return !! new URL(input, input)
+    return !!new URL(input, input)
   } catch (_) {
     return false
   }

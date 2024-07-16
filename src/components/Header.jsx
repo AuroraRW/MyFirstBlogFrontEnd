@@ -6,7 +6,7 @@ import { Popover, Transition } from '@headlessui/react'
 import clsx from 'clsx'
 
 import { Container } from '@/components/Container'
-import LoginLogoutLink from "@/components/LoginLogoutLink"
+import LoginLogoutLink from '@/components/LoginLogoutLink'
 import avatarImage from '@/images/avatar.jpg'
 
 function CloseIcon(props) {
@@ -84,9 +84,7 @@ function MobileNavigation(props) {
               <Popover.Button aria-label="Close menu" className="-m-1 p-1">
                 <CloseIcon className="h-6 w-6 text-zinc-500" />
               </Popover.Button>
-              <h2 className="text-sm font-medium text-zinc-600">
-                Navigation
-              </h2>
+              <h2 className="text-sm font-medium text-zinc-600">Navigation</h2>
             </div>
             <nav className="mt-6">
               <ul className="-my-2 divide-y divide-zinc-100 text-base text-zinc-800">
@@ -114,9 +112,7 @@ function NavItem({ href, children }) {
         href={href}
         className={clsx(
           'relative block px-3 py-2 transition',
-          isActive
-            ? 'text-teal-500'
-            : 'hover:text-teal-500'
+          isActive ? 'text-teal-500' : 'hover:text-teal-500',
         )}
       >
         {children}
@@ -154,7 +150,7 @@ function AvatarContainer({ className, ...props }) {
     <div
       className={clsx(
         className,
-        'h-10 w-10 rounded-full bg-white/90 p-0.5 shadow-lg shadow-zinc-800/5 ring-1 ring-zinc-900/5 backdrop-blur'
+        'h-10 w-10 rounded-full bg-white/90 p-0.5 shadow-lg shadow-zinc-800/5 ring-1 ring-zinc-900/5 backdrop-blur',
       )}
       {...props}
     />
@@ -175,7 +171,7 @@ function Avatar({ large = false, className, ...props }) {
         sizes={large ? '4rem' : '2.25rem'}
         className={clsx(
           'rounded-full bg-zinc-100 object-cover',
-          large ? 'h-16 w-16' : 'h-9 w-9'
+          large ? 'h-16 w-16' : 'h-9 w-9',
         )}
         priority
       />
@@ -207,7 +203,7 @@ export function Header() {
       let scrollY = clamp(
         window.scrollY,
         0,
-        document.body.scrollHeight - window.innerHeight
+        document.body.scrollHeight - window.innerHeight,
       )
 
       if (isInitial.current) {
@@ -259,7 +255,7 @@ export function Header() {
 
       setProperty(
         '--avatar-image-transform',
-        `translate3d(${x}rem, 0, 0) scale(${scale})`
+        `translate3d(${x}rem, 0, 0) scale(${scale})`,
       )
 
       let borderScale = 1 / (toScale / scale)
@@ -348,8 +344,7 @@ export function Header() {
                 <MobileNavigation className="pointer-events-auto md:hidden" />
                 <DesktopNavigation className="pointer-events-auto hidden md:block" />
               </div>
-              <div className="flex justify-end md:flex-1">
-              </div>
+              <div className="flex justify-end md:flex-1"></div>
             </div>
           </Container>
         </div>

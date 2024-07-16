@@ -11,8 +11,8 @@ export const postParameters = (posts) => {
         title: post.title,
         body: post.body,
         createdDate: post.createdDate,
-        slug: post.slug
-      }
+        slug: post.slug,
+      },
     }
   })
 }

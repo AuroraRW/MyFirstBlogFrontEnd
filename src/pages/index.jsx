@@ -19,7 +19,7 @@ import image4 from '@/images/photos/image-4.jpg'
 import image5 from '@/images/photos/image-5.jpg'
 import { generateRssFeed } from '@/lib/generateRssFeed'
 import { formatDate } from '@/lib/formatDate'
-import { getPosts } from "@/api/postsApi"
+import { getPosts } from '@/api/postsApi'
 
 function MailIcon(props) {
   return (
@@ -49,9 +49,7 @@ function Post({ post }) {
 
   return (
     <Card as="article">
-      <Card.Title href={`/posts/${post.slug}`}>
-        {post.title}
-      </Card.Title>
+      <Card.Title href={`/posts/${post.slug}`}>{post.title}</Card.Title>
       <Card.Eyebrow as="time" dateTime={date} decorate>
         {formatDate(date)}
       </Card.Eyebrow>
@@ -109,7 +107,7 @@ function Photos() {
             key={image.src}
             className={clsx(
               'relative aspect-[9/10] w-44 flex-none overflow-hidden rounded-xl bg-zinc-100 sm:w-72 sm:rounded-2xl',
-              rotations[imageIndex % rotations.length]
+              rotations[imageIndex % rotations.length],
             )}
           >
             <Image
@@ -194,7 +192,7 @@ export async function getStaticProps() {
 
   return {
     props: {
-      posts: ( await getPosts() || [{}] )
+      posts: (await getPosts()) || [{}],
     },
   }
 }

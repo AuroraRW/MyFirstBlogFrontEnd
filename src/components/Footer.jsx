@@ -3,10 +3,7 @@ import { Container } from '@/components/Container'
 
 function NavLink({ href, children }) {
   return (
-    <Link
-      href={href}
-      className="transition hover:text-teal-500"
-    >
+    <Link href={href} className="transition hover:text-teal-500">
       {children}
     </Link>
   )
@@ -16,7 +13,7 @@ export function Footer() {
   return (
     <footer className="mt-32">
       <Container.Outer>
-        <div className="border-t border-zinc-100 pt-10 pb-16">
+        <div className="border-t border-zinc-100 pb-16 pt-10">
           <Container.Inner>
             <div className="flex flex-col items-center justify-between gap-6 sm:flex-row">
               <div className="flex gap-6 text-sm font-medium text-zinc-800">
