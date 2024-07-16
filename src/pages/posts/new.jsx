@@ -28,7 +28,8 @@ export default function NewPost() {
       }
     } catch (error) {
       console.error('New post error:', error)
-      setErrors([...errors, error.message])
+      const customErrorMessage = error.response?.data?.errors[0] || "An unexpected error occurred";
+      setErrors([...errors, customErrorMessage])
     } finally {
       setIsLoading(false)
     }
@@ -75,7 +76,7 @@ export default function NewPost() {
             </ul>
           )}
           <Button
-            className="w-full text-3xl"
+            className="w-full text-xl"
             type="submit"
             disabled={isLoading}
           >
