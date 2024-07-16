@@ -23,10 +23,9 @@ export const createPost = async (post) => {
     console.log('Creating post:', post)
     const response = await API.post('/posts', post)
     console.log('Post created:', response.data)
-    //await new Promise((resolve) => setTimeout(resolve, 1000))
-    return response.data.post
+    return response.data;
   } catch (error) {
     console.error('Error creating post:', error.response?.data || error.message)
-    throw error
+    throw error;
   }
 }
