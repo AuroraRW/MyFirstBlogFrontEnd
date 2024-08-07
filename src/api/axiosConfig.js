@@ -2,7 +2,7 @@ import axios from "axios"
 import { isHyperlink } from '@/lib/isHyperlink'
 
 
-const BASE_URL = process.env.DOTNET_SERVER_URL || 'https://localhost:5000/api';
+const BASE_URL = process.env.DOTNET_SERVER_URL || 'http://localhost:5000/api';
 
 
 const AXIOS_BASE = axios.create({

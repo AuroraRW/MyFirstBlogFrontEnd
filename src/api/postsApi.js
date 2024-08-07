@@ -1,23 +1,21 @@
-import API from './axiosConfig'
+import JSON_CLIENT from '@/api/axiosConfig';
 
-export const getPosts = () => {
+export const getPosts = async () => {
   try {
-    return API.get('/posts/')
-      .then((res) => res.data)
+    const response = await JSON_CLIENT.get('/posts');
+    return response.data;
+  } catch (error) {
+    console.error('Failed to fetch posts:', error);
+    return [];
   }
-  catch (e) {
-    console.error(e)
-    return []
-  }
-}
+};
 
-export const getPost = (postSlug) => {
+export const getPost = async (slug) => {
   try {
-    return API.get(`/posts/${postSlug}`)
-      .then((res) => res.data)
+    const response = await JSON_CLIENT.get(`/posts/${slug}`);
+    return response.data;
+  } catch (error) {
+    console.error('Failed to fetch post:', error);
+    return null;
   }
-  catch (e) {
-    console.error(e)
-    return {}
-  }
-}
+};
