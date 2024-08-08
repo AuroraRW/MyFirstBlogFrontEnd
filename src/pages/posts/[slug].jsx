@@ -18,10 +18,11 @@ export async function getStaticProps(context) {
   }
 }
 
+
 export default function Post({ post }) {
   const meta = {
     author: 'Spencer Sharp',
-    date: post.createdDate,
+    date: post.createdDate, //bug fixes
     title: post.title,
     description: post.body,
   };
