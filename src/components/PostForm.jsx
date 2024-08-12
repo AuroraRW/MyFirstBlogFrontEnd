@@ -53,5 +53,3 @@ export default function PostForm({ onSubmit, errors }) {
     </form>
   );
 }
-
-//WE HAVE TO REVERT axoisConfig and PostApi to the original code. We just hard coded the 

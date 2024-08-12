@@ -26,7 +26,23 @@ export default function NewPostPage() {
   const router = useRouter();
 
   const handleSubmit = async (formData) => {
-    console.log('Form data submitted:', formData);
+    const validationErrors = [];
+
+    // Validation checks
+    if (!formData.title) {
+      validationErrors.push({ message: "Title is required" });
+    }
+
+    if (!formData.description) {
+      validationErrors.push({ message: "Description is required" });
+    }
+
+    if (validationErrors.length > 0) {
+      setErrors(validationErrors);
+      console.log("Validation Errors:", validationErrors); // Log errors
+      return; // Prevent form submission if there are validation errors
+    }
+
     try {
       const response = await createPost(formData);
       console.log('Post created:', response);
@@ -52,10 +68,7 @@ export default function NewPostPage() {
     <>
       <Head>
         <title>Create New Post - Spencer Sharp</title>
-        <meta
-          name="description"
-          content="Create a new post for the blog."
-        />
+        <meta name="description" content="Create a new post for the blog." />
       </Head>
       <SimpleLayout
         title="Create a New Post"
