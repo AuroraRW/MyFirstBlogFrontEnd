@@ -5,9 +5,11 @@ import { useRouter } from 'next/router'
 import { Popover, Transition } from '@headlessui/react'
 import clsx from 'clsx'
 
+
 import { Container } from '@/components/Container'
 import LoginLogoutLink from "@/components/LoginLogoutLink"
 import avatarImage from '@/images/avatar.jpg'
+
 
 function CloseIcon(props) {
   return (
@@ -24,6 +26,7 @@ function CloseIcon(props) {
   )
 }
 
+
 function ChevronDownIcon(props) {
   return (
     <svg viewBox="0 0 8 6" aria-hidden="true" {...props}>
@@ -38,6 +41,7 @@ function ChevronDownIcon(props) {
   )
 }
 
+
 function MobileNavItem({ href, children }) {
   return (
     <li>
@@ -47,6 +51,7 @@ function MobileNavItem({ href, children }) {
     </li>
   )
 }
+
 
 function MobileNavigation(props) {
   return (
@@ -92,6 +97,11 @@ function MobileNavigation(props) {
               <ul className="-my-2 divide-y divide-zinc-100 text-base text-zinc-800">
                 <MobileNavItem href="/about">About</MobileNavItem>
                 <MobileNavItem href="/posts">Posts</MobileNavItem>
+                <li>
+                 <Popover.Button as = {Link} href = " /posts/createnewpost" className = "block py-2">
+                 Create New Post
+                 </Popover.Button>
+              </li>
                 <MobileNavItem href="/projects">Projects</MobileNavItem>
                 <MobileNavItem href="/speaking">Speaking</MobileNavItem>
                 <MobileNavItem href="/uses">Uses</MobileNavItem>
@@ -105,8 +115,10 @@ function MobileNavigation(props) {
   )
 }
 
+
 function NavItem({ href, children }) {
   let isActive = useRouter().pathname === href
+
 
   return (
     <li>
@@ -128,12 +140,20 @@ function NavItem({ href, children }) {
   )
 }
 
+
 function DesktopNavigation(props) {
   return (
     <nav {...props}>
       <ul className="flex rounded-full bg-white/90 px-3 text-sm font-medium text-zinc-800 shadow-lg shadow-zinc-800/5 ring-1 ring-zinc-900/5 backdrop-blur">
         <NavItem href="/about">About</NavItem>
         <NavItem href="/posts">Posts</NavItem>
+        <li>
+          <Link
+             href = "/posts/createnewpost"
+             className = "relative block px-3 py-2  transition hover:text-teal-500">
+              Create New Post
+             </Link>
+        </li>
         <NavItem href="/projects">Projects</NavItem>
         <NavItem href="/speaking">Speaking</NavItem>
         <NavItem href="/uses">Uses</NavItem>
@@ -143,11 +163,13 @@ function DesktopNavigation(props) {
   )
 }
 
+
 function clamp(number, a, b) {
   let min = Math.min(a, b)
   let max = Math.max(a, b)
   return Math.min(Math.max(number, min), max)
 }
+
 
 function AvatarContainer({ className, ...props }) {
   return (
@@ -160,6 +182,7 @@ function AvatarContainer({ className, ...props }) {
     />
   )
 }
+
 
 function Avatar({ large = false, className, ...props }) {
   return (
@@ -183,24 +206,30 @@ function Avatar({ large = false, className, ...props }) {
   )
 }
 
+
 export function Header() {
   let isHomePage = useRouter().pathname === '/'
+
 
   let headerRef = useRef()
   let avatarRef = useRef()
   let isInitial = useRef(true)
 
+
   useEffect(() => {
     let downDelay = avatarRef.current?.offsetTop ?? 0
     let upDelay = 64
+
 
     function setProperty(property, value) {
       document.documentElement.style.setProperty(property, value)
     }
 
+
     function removeProperty(property) {
       document.documentElement.style.removeProperty(property)
     }
+
 
     function updateHeaderStyles() {
       let { top, height } = headerRef.current.getBoundingClientRect()
@@ -210,11 +239,14 @@ export function Header() {
         document.body.scrollHeight - window.innerHeight
       )
 
+
       if (isInitial.current) {
         setProperty('--header-position', 'sticky')
       }
 
+
       setProperty('--content-offset', `${downDelay}px`)
+
 
       if (isInitial.current || scrollY < downDelay) {
         setProperty('--header-height', `${downDelay + height}px`)
@@ -228,6 +260,7 @@ export function Header() {
         setProperty('--header-mb', `${-scrollY}px`)
       }
 
+
       if (top === 0 && scrollY > 0 && scrollY >= downDelay) {
         setProperty('--header-inner-position', 'fixed')
         removeProperty('--header-top')
@@ -239,36 +272,45 @@ export function Header() {
       }
     }
 
+
     function updateAvatarStyles() {
       if (!isHomePage) {
         return
       }
+
 
       let fromScale = 1
       let toScale = 36 / 64
       let fromX = 0
       let toX = 2 / 16
 
+
       let scrollY = downDelay - window.scrollY
+
 
       let scale = (scrollY * (fromScale - toScale)) / downDelay + toScale
       scale = clamp(scale, fromScale, toScale)
 
+
       let x = (scrollY * (fromX - toX)) / downDelay + toX
       x = clamp(x, fromX, toX)
+
 
       setProperty(
         '--avatar-image-transform',
         `translate3d(${x}rem, 0, 0) scale(${scale})`
       )
 
+
       let borderScale = 1 / (toScale / scale)
       let borderX = (-toX + x) * borderScale
       let borderTransform = `translate3d(${borderX}rem, 0, 0) scale(${borderScale})`
 
+
       setProperty('--avatar-border-transform', borderTransform)
       setProperty('--avatar-border-opacity', scale === toScale ? 1 : 0)
     }
+
 
     function updateStyles() {
       updateHeaderStyles()
@@ -276,15 +318,18 @@ export function Header() {
       isInitial.current = false
     }
 
+
     updateStyles()
     window.addEventListener('scroll', updateStyles, { passive: true })
     window.addEventListener('resize', updateStyles)
+
 
     return () => {
       window.removeEventListener('scroll', updateStyles, { passive: true })
       window.removeEventListener('resize', updateStyles)
     }
   }, [isHomePage])
+
 
   return (
     <>
