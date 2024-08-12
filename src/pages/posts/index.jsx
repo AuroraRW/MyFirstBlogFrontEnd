@@ -4,6 +4,7 @@ import { Card } from '@/components/Card'
 import { SimpleLayout } from '@/components/SimpleLayout'
 import { formatDate } from '@/lib/formatDate'
 import { getPosts, getPost } from "@/api/postsApi"
+import NewPost from './new'
 
 function Post({ post }) {
   const date = new Date(post.createdDate)
@@ -57,6 +58,7 @@ export default function PostsIndex({ posts }) {
             ))}
           </div>
         </div>
+        <NewPost />
       </SimpleLayout>
     </>
   )
