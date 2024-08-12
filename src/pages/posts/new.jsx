@@ -1,10 +1,10 @@
 // src/pages/posts/new.jsx
 import Head from 'next/head';
 import React, { useState } from 'react';
-import { useRouter } from 'next/router';
 import axios from 'axios';
 import { SimpleLayout } from '@/components/SimpleLayout';
 import PostForm from '@/components/PostForm';
+import { ArticleLayout } from '@/components/ArticleLayout';
 
 const createPost = async (postData) => {
   const API_URL = 'http://localhost:5000/posts';
@@ -17,18 +17,17 @@ const createPost = async (postData) => {
     return response.data;
   } catch (e) {
     console.error('Error in createPost:', e.response ? e.response.data : e.message);
-    throw e;  // rethrow to handle it in the calling function
+    throw e;
   }
 };
 
 export default function NewPostPage() {
   const [errors, setErrors] = useState(null);
-  const router = useRouter();
+  const [createdPost, setCreatedPost] = useState(null);
 
   const handleSubmit = async (formData) => {
     const validationErrors = [];
 
-    // Validation checks
     if (!formData.title) {
       validationErrors.push({ message: "Title is required" });
     }
@@ -39,21 +38,14 @@ export default function NewPostPage() {
 
     if (validationErrors.length > 0) {
       setErrors(validationErrors);
-      console.log("Validation Errors:", validationErrors); // Log errors
-      return; // Prevent form submission if there are validation errors
+      console.log("Validation Errors:", validationErrors);
+      return;
     }
 
     try {
       const response = await createPost(formData);
       console.log('Post created:', response);
-
-      const post = response.post;
-      if (post && post.slug) {
-        console.log('created:', post.slug); 
-        router.push(`/posts/${post.slug}`);
-      } else {
-        throw new Error('Post slug is missing in the response');
-      }
+      setCreatedPost(response.post);  // Store the created post in state
     } catch (error) {
       console.error('Error submitting form:', error.response ? error.response.data : error.message);
       if (error.response && error.response.data && error.response.data.errors) {
@@ -63,6 +55,21 @@ export default function NewPostPage() {
       }
     }
   };
+
+  if (createdPost) {
+    const meta = {
+      author: 'Spencer Sharp',
+      date: createdPost.createdDate,
+      title: createdPost.title,
+      description: createdPost.body,
+    };
+
+    return (
+      <ArticleLayout meta={meta}>
+        {createdPost.body}
+      </ArticleLayout>
+    );
+  }
 
   return (
     <>
