@@ -1,23 +1,51 @@
-import API from './axiosConfig'
+// src/api/postsApi.js
 
-export const getPosts = () => {
-  try {
-    return API.get('/posts/')
-      .then((res) => res.data)
-  }
-  catch (e) {
-    console.error(e)
-    return []
-  }
-}
+const apiUrl = process.env.DOTNET_SERVER_URL || 'http://localhost:5000';
 
-export const getPost = (postSlug) => {
+export const getPosts = async () => {
   try {
-    return API.get(`/posts/${postSlug}`)
-      .then((res) => res.data)
+    const response = await fetch(`${apiUrl}/api/posts`);
+    if (!response.ok) {
+      const errorDetails = await response.text();
+      throw new Error(`Error fetching posts: ${response.status} ${response.statusText} - ${errorDetails}`);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching posts:', error);
+    throw error;
   }
-  catch (e) {
-    console.error(e)
-    return {}
+};
+
+export const getPost = async (slug) => {
+  try {
+    const response = await fetch(`${apiUrl}/api/posts/${slug}`);
+    if (!response.ok) {
+      const errorDetails = await response.text();
+      throw new Error(`Error fetching post: ${response.status} ${response.statusText} - ${errorDetails}`);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching post:', error);
+    throw error;
   }
-}
+};
+
+export const createPost = async (post) => {
+  try {
+    const response = await fetch(`${apiUrl}/api/posts`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(post),
+    });
+    if (!response.ok) {
+      const errorDetails = await response.text();
+      throw new Error(`Error creating post: ${response.status} ${response.statusText} - ${errorDetails}`);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error('Error creating post:', error);
+    throw error;
+  }
+};
