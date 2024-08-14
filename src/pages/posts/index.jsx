@@ -1,71 +1,70 @@
-import Head from 'next/head'
+import Head from 'next/head';
+import { Card } from '@/components/Card';
+import { SimpleLayout } from '@/components/SimpleLayout';
+import { formatDate } from '@/lib/formatDate';
+import { getPosts } from '@/api/postsApi'; // Adjust the path if necessary
 
-import { Card } from '@/components/Card'
-import { SimpleLayout } from '@/components/SimpleLayout'
-import { formatDate } from '@/lib/formatDate'
-import { getPosts, getPost } from "@/api/postsApi"
-
-function Post({ post }) {
-  const date = new Date(post.createdDate)
+const Post = ({ post }) => {
+  const { slug, title, body, createdDate } = post;
+  const formattedDate = formatDate(new Date(createdDate));
 
   return (
     <article className="md:grid md:grid-cols-4 md:items-baseline">
       <Card className="md:col-span-3">
-        <Card.Title href={`/posts/${post.slug}`}>
-          {post.title}
+        <Card.Title href={`/posts/${slug}`}>
+          {title}
         </Card.Title>
         <Card.Eyebrow
           as="time"
-          dateTime={date}
+          dateTime={createdDate}
           className="md:hidden"
           decorate
         >
-          {formatDate(date)}
+          {formattedDate}
         </Card.Eyebrow>
-        <Card.Description>{post.body}</Card.Description>
+        <Card.Description>{body}</Card.Description>
         <Card.Cta>Read post</Card.Cta>
       </Card>
       <Card.Eyebrow
         as="time"
-        dateTime={date}
+        dateTime={createdDate}
         className="mt-1 hidden md:block"
       >
-        {formatDate(date)}
+        {formattedDate}
       </Card.Eyebrow>
     </article>
-  )
-}
+  );
+};
 
-export default function PostsIndex({ posts }) {
-  return (
-    <>
-      <Head>
-        <title>Posts - Spencer Sharp</title>
-        <meta
-          name="description"
-          content="All of my long-form thoughts on programming, leadership, product design, and more, collected in chronological order."
-        />
-      </Head>
-      <SimpleLayout
-        title="Writing on software design, company building, and the aerospace industry."
-        intro="All of my long-form thoughts on programming, leadership, product design, and more, collected in chronological order."
-      >
-        <div className="md:border-l md:border-zinc-100 md:pl-6">
-          <div className="flex max-w-3xl flex-col space-y-16">
-            {posts.map((post) => (
-              <Post key={post.slug} post={post} />
-            ))}
-          </div>
+const PostsIndex = ({ posts }) => (
+  <>
+    <Head>
+      <title>Posts - Spencer Sharp</title>
+      <meta
+        name="description"
+        content="All of my long-form thoughts on programming, leadership, product design, and more, collected in chronological order."
+      />
+    </Head>
+    <SimpleLayout
+      title="Writing on software design, company building, and the aerospace industry."
+      intro="All of my long-form thoughts on programming, leadership, product design, and more, collected in chronological order."
+    >
+      <div className="md:border-l md:border-zinc-100 md:pl-6">
+        <div className="flex max-w-3xl flex-col space-y-16">
+          {posts.map(post => (
+            <Post key={post.slug} post={post} />
+          ))}
         </div>
-      </SimpleLayout>
-    </>
-  )
-}
+      </div>
+    </SimpleLayout>
+  </>
+);
 
 export async function getStaticProps() {
+  const posts = await getPosts() || [];
   return {
-    props: {
-      posts: (await getPosts() || []),
-    },
-  }
+    props: { posts },
+  };
 }
+
+export default PostsIndex;
