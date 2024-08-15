@@ -1,7 +1,8 @@
 import axios from "axios"
 import { isHyperlink } from '@/lib/isHyperlink'
 
-const BASE_URL = process.env.DOTNET_SERVER_URL
+// Define the base URL for backend API
+const BASE_URL = 'http://localhost:5000';
 
 const AXIOS_BASE = axios.create({
     baseURL: BASE_URL,
