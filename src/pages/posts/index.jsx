@@ -1,9 +1,9 @@
 import Head from 'next/head'
-
+import Link from 'next/link'
 import { Card } from '@/components/Card'
 import { SimpleLayout } from '@/components/SimpleLayout'
 import { formatDate } from '@/lib/formatDate'
-import { getPosts, getPost } from "@/api/postsApi"
+import { getPosts } from "@/api/postsApi"
 
 function Post({ post }) {
   const date = new Date(post.createdDate)
@@ -50,6 +50,14 @@ export default function PostsIndex({ posts }) {
         title="Writing on software design, company building, and the aerospace industry."
         intro="All of my long-form thoughts on programming, leadership, product design, and more, collected in chronological order."
       >
+
+        {/* Link to create a new post */}
+        <div className="flex justify-end">
+          <Link href="/posts/new" className="text-blue-500 hover:underline">
+          Create New Post
+          </Link>
+        </div>
+
         <div className="md:border-l md:border-zinc-100 md:pl-6">
           <div className="flex max-w-3xl flex-col space-y-16">
             {posts.map((post) => (
