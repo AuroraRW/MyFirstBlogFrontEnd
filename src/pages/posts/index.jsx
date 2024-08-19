@@ -1,12 +1,11 @@
-import Head from 'next/head'
-
-import { Card } from '@/components/Card'
-import { SimpleLayout } from '@/components/SimpleLayout'
-import { formatDate } from '@/lib/formatDate'
-import { getPosts, getPost } from "@/api/postsApi"
+import Head from 'next/head';
+import { Card } from '@/components/Card';
+import { SimpleLayout } from '@/components/SimpleLayout';
+import { formatDate } from '@/lib/formatDate';
+import { getPosts } from '@/api/postsApi';
 
 function Post({ post }) {
-  const date = new Date(post.createdDate)
+  const formattedDate = formatDate(post.createdDate);
 
   return (
     <article className="md:grid md:grid-cols-4 md:items-baseline">
@@ -16,24 +15,24 @@ function Post({ post }) {
         </Card.Title>
         <Card.Eyebrow
           as="time"
-          dateTime={date}
+          dateTime={post.createdDate}
           className="md:hidden"
           decorate
         >
-          {formatDate(date)}
+          {formattedDate}
         </Card.Eyebrow>
         <Card.Description>{post.body}</Card.Description>
         <Card.Cta>Read post</Card.Cta>
       </Card>
       <Card.Eyebrow
         as="time"
-        dateTime={date}
+        dateTime={post.createdDate}
         className="mt-1 hidden md:block"
       >
-        {formatDate(date)}
+        {formattedDate}
       </Card.Eyebrow>
     </article>
-  )
+  );
 }
 
 export default function PostsIndex({ posts }) {
@@ -59,13 +58,15 @@ export default function PostsIndex({ posts }) {
         </div>
       </SimpleLayout>
     </>
-  )
+  );
 }
 
 export async function getStaticProps() {
+  const posts = await getPosts();
+
   return {
     props: {
-      posts: (await getPosts() || []),
+      posts: posts || [],
     },
-  }
+  };
 }

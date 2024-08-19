@@ -1,12 +1,30 @@
-import axios from "axios"
-import { isHyperlink } from '@/lib/isHyperlink'
+import axios from 'axios';
 
-const BASE_URL = process.env.DOTNET_SERVER_URL
+const axiosInstance = axios.create({
+  baseURL: process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000/api',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  timeout: 10000, // Add a timeout to handle long requests
+});
 
-const AXIOS_BASE = axios.create({
-    baseURL: BASE_URL,
-  })
+axiosInstance.interceptors.request.use(
+  (config) => {
+    // You can add additional logic here, e.g., attaching tokens
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 
-const JSON_CLIENT = isHyperlink(BASE_URL) ? AXIOS_BASE : false
+axiosInstance.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    // You can handle global errors here
+    return Promise.reject(error);
+  }
+);
 
-export default JSON_CLIENT
+export default axiosInstance;
+

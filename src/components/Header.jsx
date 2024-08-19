@@ -1,13 +1,16 @@
-import { Fragment, useEffect, useRef } from 'react'
-import Image from 'next/image'
-import Link from 'next/link'
-import { useRouter } from 'next/router'
-import { Popover, Transition } from '@headlessui/react'
-import clsx from 'clsx'
+import { Fragment, useEffect, useRef } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { Popover, Transition } from '@headlessui/react';
+import clsx from 'clsx';
 
-import { Container } from '@/components/Container'
-import LoginLogoutLink from "@/components/LoginLogoutLink"
-import avatarImage from '@/images/avatar.jpg'
+import { Container } from '@/components/Container';
+import LoginLogoutLink from "@/components/LoginLogoutLink";
+import avatarImage from '@/images/avatar.jpg';
+
+// Import the CreatePostForm directly
+import CreatePostForm from './CreatePostForm';
 
 function CloseIcon(props) {
   return (
@@ -21,7 +24,7 @@ function CloseIcon(props) {
         strokeLinejoin="round"
       />
     </svg>
-  )
+  );
 }
 
 function ChevronDownIcon(props) {
@@ -35,17 +38,26 @@ function ChevronDownIcon(props) {
         strokeLinejoin="round"
       />
     </svg>
-  )
+  );
 }
 
 function MobileNavItem({ href, children }) {
+  const router = useRouter();
+  const isActive = router.pathname === href;
+
+  const handleClick = (e) => {
+    if (isActive) {
+      e.preventDefault();
+    }
+  };
+
   return (
     <li>
-      <Popover.Button as={Link} href={href} className="block py-2">
+      <Popover.Button as={Link} href={href} onClick={handleClick} className="block py-2">
         {children}
       </Popover.Button>
     </li>
-  )
+  );
 }
 
 function MobileNavigation(props) {
@@ -95,6 +107,7 @@ function MobileNavigation(props) {
                 <MobileNavItem href="/projects">Projects</MobileNavItem>
                 <MobileNavItem href="/speaking">Speaking</MobileNavItem>
                 <MobileNavItem href="/uses">Uses</MobileNavItem>
+                <MobileNavItem href="/posts/new">New Post</MobileNavItem>
                 <LoginLogoutLink />
               </ul>
             </nav>
@@ -102,21 +115,27 @@ function MobileNavigation(props) {
         </Transition.Child>
       </Transition.Root>
     </Popover>
-  )
+  );
 }
 
 function NavItem({ href, children }) {
-  let isActive = useRouter().pathname === href
+  const router = useRouter();
+  const isActive = router.pathname === href;
+
+  const handleClick = (e) => {
+    if (isActive) {
+      e.preventDefault();
+    }
+  };
 
   return (
     <li>
       <Link
         href={href}
+        onClick={handleClick}
         className={clsx(
           'relative block px-3 py-2 transition',
-          isActive
-            ? 'text-teal-500'
-            : 'hover:text-teal-500'
+          isActive ? 'text-teal-500' : 'hover:text-teal-500'
         )}
       >
         {children}
@@ -125,7 +144,7 @@ function NavItem({ href, children }) {
         )}
       </Link>
     </li>
-  )
+  );
 }
 
 function DesktopNavigation(props) {
@@ -137,16 +156,17 @@ function DesktopNavigation(props) {
         <NavItem href="/projects">Projects</NavItem>
         <NavItem href="/speaking">Speaking</NavItem>
         <NavItem href="/uses">Uses</NavItem>
+        <NavItem href="/posts/new">New Post</NavItem>
         <LoginLogoutLink />
       </ul>
     </nav>
-  )
+  );
 }
 
 function clamp(number, a, b) {
-  let min = Math.min(a, b)
-  let max = Math.max(a, b)
-  return Math.min(Math.max(number, min), max)
+  let min = Math.min(a, b);
+  let max = Math.max(a, b);
+  return Math.min(Math.max(number, min), max);
 }
 
 function AvatarContainer({ className, ...props }) {
@@ -158,7 +178,7 @@ function AvatarContainer({ className, ...props }) {
       )}
       {...props}
     />
-  )
+  );
 }
 
 function Avatar({ large = false, className, ...props }) {
@@ -180,111 +200,111 @@ function Avatar({ large = false, className, ...props }) {
         priority
       />
     </Link>
-  )
+  );
 }
 
 export function Header() {
-  let isHomePage = useRouter().pathname === '/'
+  const isHomePage = useRouter().pathname === '/';
 
-  let headerRef = useRef()
-  let avatarRef = useRef()
-  let isInitial = useRef(true)
+  const headerRef = useRef();
+  const avatarRef = useRef();
+  const isInitial = useRef(true);
 
   useEffect(() => {
-    let downDelay = avatarRef.current?.offsetTop ?? 0
-    let upDelay = 64
+    const downDelay = avatarRef.current?.offsetTop ?? 0;
+    const upDelay = 64;
 
     function setProperty(property, value) {
-      document.documentElement.style.setProperty(property, value)
+      document.documentElement.style.setProperty(property, value);
     }
 
     function removeProperty(property) {
-      document.documentElement.style.removeProperty(property)
+      document.documentElement.style.removeProperty(property);
     }
 
     function updateHeaderStyles() {
-      let { top, height } = headerRef.current.getBoundingClientRect()
-      let scrollY = clamp(
+      const { top, height } = headerRef.current.getBoundingClientRect();
+      const scrollY = clamp(
         window.scrollY,
         0,
         document.body.scrollHeight - window.innerHeight
-      )
+      );
 
       if (isInitial.current) {
-        setProperty('--header-position', 'sticky')
+        setProperty('--header-position', 'sticky');
       }
 
-      setProperty('--content-offset', `${downDelay}px`)
+      setProperty('--content-offset', `${downDelay}px`);
 
       if (isInitial.current || scrollY < downDelay) {
-        setProperty('--header-height', `${downDelay + height}px`)
-        setProperty('--header-mb', `${-downDelay}px`)
+        setProperty('--header-height', `${downDelay + height}px`);
+        setProperty('--header-mb', `${-downDelay}px`);
       } else if (top + height < -upDelay) {
-        let offset = Math.max(height, scrollY - upDelay)
-        setProperty('--header-height', `${offset}px`)
-        setProperty('--header-mb', `${height - offset}px`)
+        const offset = Math.max(height, scrollY - upDelay);
+        setProperty('--header-height', `${offset}px`);
+        setProperty('--header-mb', `${height - offset}px`);
       } else if (top === 0) {
-        setProperty('--header-height', `${scrollY + height}px`)
-        setProperty('--header-mb', `${-scrollY}px`)
+        setProperty('--header-height', `${scrollY + height}px`);
+        setProperty('--header-mb', `${-scrollY}px`);
       }
 
       if (top === 0 && scrollY > 0 && scrollY >= downDelay) {
-        setProperty('--header-inner-position', 'fixed')
-        removeProperty('--header-top')
-        removeProperty('--avatar-top')
+        setProperty('--header-inner-position', 'fixed');
+        removeProperty('--header-top');
+        removeProperty('--avatar-top');
       } else {
-        removeProperty('--header-inner-position')
-        setProperty('--header-top', '0px')
-        setProperty('--avatar-top', '0px')
+        removeProperty('--header-inner-position');
+        setProperty('--header-top', '0px');
+        setProperty('--avatar-top', '0px');
       }
     }
 
     function updateAvatarStyles() {
       if (!isHomePage) {
-        return
+        return;
       }
 
-      let fromScale = 1
-      let toScale = 36 / 64
-      let fromX = 0
-      let toX = 2 / 16
+      const fromScale = 1;
+      const toScale = 36 / 64;
+      const fromX = 0;
+      const toX = 2 / 16;
 
-      let scrollY = downDelay - window.scrollY
+      const scrollY = downDelay - window.scrollY;
 
-      let scale = (scrollY * (fromScale - toScale)) / downDelay + toScale
-      scale = clamp(scale, fromScale, toScale)
+      let scale = (scrollY * (fromScale - toScale)) / downDelay + toScale;
+      scale = clamp(scale, fromScale, toScale);
 
-      let x = (scrollY * (fromX - toX)) / downDelay + toX
-      x = clamp(x, fromX, toX)
+      let x = (scrollY * (fromX - toX)) / downDelay + toX;
+      x = clamp(x, fromX, toX);
 
       setProperty(
         '--avatar-image-transform',
         `translate3d(${x}rem, 0, 0) scale(${scale})`
-      )
+      );
 
-      let borderScale = 1 / (toScale / scale)
-      let borderX = (-toX + x) * borderScale
-      let borderTransform = `translate3d(${borderX}rem, 0, 0) scale(${borderScale})`
+      const borderScale = 1 / (toScale / scale);
+      const borderX = (-toX + x) * borderScale;
+      const borderTransform = `translate3d(${borderX}rem, 0, 0) scale(${borderScale})`;
 
-      setProperty('--avatar-border-transform', borderTransform)
-      setProperty('--avatar-border-opacity', scale === toScale ? 1 : 0)
+      setProperty('--avatar-border-transform', borderTransform);
+      setProperty('--avatar-border-opacity', scale === toScale ? 1 : 0);
     }
 
     function updateStyles() {
-      updateHeaderStyles()
-      updateAvatarStyles()
-      isInitial.current = false
+      updateHeaderStyles();
+      updateAvatarStyles();
+      isInitial.current = false;
     }
 
-    updateStyles()
-    window.addEventListener('scroll', updateStyles, { passive: true })
-    window.addEventListener('resize', updateStyles)
+    updateStyles();
+    window.addEventListener('scroll', updateStyles, { passive: true });
+    window.addEventListener('resize', updateStyles);
 
     return () => {
-      window.removeEventListener('scroll', updateStyles, { passive: true })
-      window.removeEventListener('resize', updateStyles)
-    }
-  }, [isHomePage])
+      window.removeEventListener('scroll', updateStyles, { passive: true });
+      window.removeEventListener('resize', updateStyles);
+    };
+  }, [isHomePage]);
 
   return (
     <>
@@ -348,13 +368,16 @@ export function Header() {
                 <MobileNavigation className="pointer-events-auto md:hidden" />
                 <DesktopNavigation className="pointer-events-auto hidden md:block" />
               </div>
-              <div className="flex justify-end md:flex-1">
-              </div>
+              <div className="flex justify-end md:flex-1"></div>
             </div>
           </Container>
         </div>
       </header>
+
+      {/* Insert the CreatePostForm component here */}
+      {isHomePage && <CreatePostForm />}
+
       {isHomePage && <div style={{ height: 'var(--content-offset)' }} />}
     </>
-  )
+  );
 }

@@ -1,8 +1,18 @@
 export function formatDate(dateString) {
-  return new Date(dateString).toLocaleDateString('en-US', {
+  const date = new Date(dateString);
+
+  if (isNaN(date.getTime())) {
+    // Handle invalid date input
+    throw new Error('Invalid date string provided.');
+  }
+
+  return date.toLocaleString('en-US', {
     day: 'numeric',
     month: 'long',
     year: 'numeric',
-    timeZone: 'UTC',
-  })
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric',
+    timeZoneName: 'short',
+  });
 }
