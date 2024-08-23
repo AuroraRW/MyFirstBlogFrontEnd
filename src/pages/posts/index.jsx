@@ -1,9 +1,9 @@
 import Head from 'next/head'
-
+import Link from 'next/link'  // Import Link from Next.js
 import { Card } from '@/components/Card'
 import { SimpleLayout } from '@/components/SimpleLayout'
 import { formatDate } from '@/lib/formatDate'
-import { getPosts, getPost } from "@/api/postsApi"
+import { getPosts } from '@/api/postsApi'
 
 function Post({ post }) {
   const date = new Date(post.createdDate)
@@ -50,6 +50,16 @@ export default function PostsIndex({ posts }) {
         title="Writing on software design, company building, and the aerospace industry."
         intro="All of my long-form thoughts on programming, leadership, product design, and more, collected in chronological order."
       >
+
+        {/* Add the "Create New Post" Button */}
+        <div className="mb-8">
+          <Link href="/posts/new">
+            <id className="inline-block px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600">
+              Create New Post
+            </id>
+          </Link>
+        </div>
+
         <div className="md:border-l md:border-zinc-100 md:pl-6">
           <div className="flex max-w-3xl flex-col space-y-16">
             {posts.map((post) => (
