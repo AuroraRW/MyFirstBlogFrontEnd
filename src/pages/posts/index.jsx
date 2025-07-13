@@ -1,9 +1,10 @@
 import Head from 'next/head'
+import Link from 'next/link'
 
 import { Card } from '@/components/Card'
 import { SimpleLayout } from '@/components/SimpleLayout'
 import { formatDate } from '@/lib/formatDate'
-import { getPosts, getPost } from "@/api/postsApi"
+import { getPosts } from "@/api/postsApi"
 
 function Post({ post }) {
   const date = new Date(post.createdDate)
@@ -51,10 +52,19 @@ export default function PostsIndex({ posts }) {
         intro="All of my long-form thoughts on programming, leadership, product design, and more, collected in chronological order."
       >
         <div className="md:border-l md:border-zinc-100 md:pl-6">
+          
           <div className="flex max-w-3xl flex-col space-y-16">
             {posts.map((post) => (
               <Post key={post.slug} post={post} />
             ))}
+          </div>
+          <div className="flex  mb-6">
+            <Link
+              href="/posts/new"
+              className="inline-block rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700"
+            >
+              Create Post
+            </Link>
           </div>
         </div>
       </SimpleLayout>
@@ -63,9 +73,12 @@ export default function PostsIndex({ posts }) {
 }
 
 export async function getStaticProps() {
+  const posts = await getPosts() || []
+  console.log("Fetched posts:", posts)
+
   return {
     props: {
-      posts: (await getPosts() || []),
+      posts,
     },
   }
 }
