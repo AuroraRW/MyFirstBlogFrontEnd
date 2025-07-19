@@ -1,15 +1,17 @@
 import Head from 'next/head'
+import Link from 'next/link'
 
 import { Card } from '@/components/Card'
 import { SimpleLayout } from '@/components/SimpleLayout'
 import { formatDate } from '@/lib/formatDate'
 import { getPosts, getPost } from "@/api/postsApi"
+import {NewPostPage} from "@/pages/posts/new"
 
 function Post({ post }) {
   const date = new Date(post.createdDate)
 
   return (
-    <article className="md:grid md:grid-cols-4 md:items-baseline">
+    <><article className="md:grid md:grid-cols-4 md:items-baseline">
       <Card className="md:col-span-3">
         <Card.Title href={`/posts/${post.slug}`}>
           {post.title}
@@ -32,7 +34,7 @@ function Post({ post }) {
       >
         {formatDate(date)}
       </Card.Eyebrow>
-    </article>
+    </article><NewPostPage /></>
   )
 }
 
@@ -56,6 +58,14 @@ export default function PostsIndex({ posts }) {
               <Post key={post.slug} post={post} />
             ))}
           </div>
+                    <div className="flex  mb-6">
+            <Link
+              href="/posts/new"
+              className="inline-block rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-darkblue-700"
+            >
+              Create Post
+            </Link>
+          </div>
         </div>
       </SimpleLayout>
     </>
@@ -63,9 +73,12 @@ export default function PostsIndex({ posts }) {
 }
 
 export async function getStaticProps() {
+  const posts = await getPosts() || []
+  console.log("Fetched posts:", posts)
+
   return {
     props: {
-      posts: (await getPosts() || []),
+      posts,
     },
   }
 }
