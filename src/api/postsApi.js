@@ -21,3 +21,20 @@ export const getPost = (postSlug) => {
     return {}
   }
 }
+
+export const createPost = async ({ title, description }) => {
+  if (!API) {
+    throw ['API is not configured correctly.'];
+  }
+
+  try {
+    const response = await API.post('/posts/', { title, description });
+    return response.data;
+  } catch (error) {
+    if (error.response?.data?.errors) {
+      throw error.response.data.errors;
+    }
+    console.error(error);
+    throw ['An unexpected error occurred.'];
+  }
+};
