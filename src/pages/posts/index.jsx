@@ -22,7 +22,7 @@ function Post({ post }) {
         >
           {formatDate(date)}
         </Card.Eyebrow>
-        <Card.Description>{post.body}</Card.Description>
+        <Card.Description>{post.description}</Card.Description>
         <Card.Cta>Read post</Card.Cta>
       </Card>
       <Card.Eyebrow
