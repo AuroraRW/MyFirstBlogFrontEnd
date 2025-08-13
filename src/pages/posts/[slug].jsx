@@ -27,12 +27,12 @@ export default function Post({ post }) {
     author: 'Spencer Sharp',
     date: post.createdDate,
     title: post.title,
-    description: post.body,
+    description: post.description,
   }
 
   return (
     <ArticleLayout meta={meta}>
-      {post.body}
+      {post.description}
     </ArticleLayout>
   )
 }
