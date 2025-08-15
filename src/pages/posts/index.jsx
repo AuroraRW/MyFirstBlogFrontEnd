@@ -39,6 +39,7 @@ function Post({ post }) {
 }
 
 export default function PostsIndex({ posts }) {
+    const { user, isLoading } = useUser()
   return (
     <>
       <Head>
@@ -52,12 +53,16 @@ export default function PostsIndex({ posts }) {
         title="Writing on software design, company building, and the aerospace industry."
         intro="All of my long-form thoughts on programming, leadership, product design, and more, collected in chronological order."
       >
-         <Link
+           {!isLoading && user && (
+              <div className="mb-8">
+                <Link
                   href="/posts/newPost"
-                  className="mb-8 inline-block rounded bg-blue-600 px-5 py-2 text-white hover:bg-blue-700"
+                  className="inline-block rounded bg-blue-600 px-5 py-2 text-white hover:bg-blue-700"
                 >
                   Create New Post
                 </Link>
+              </div>
+            )}
        
         <div className="md:border-l md:border-zinc-100 md:pl-6">
           <div className="flex max-w-3xl flex-col space-y-16">           
