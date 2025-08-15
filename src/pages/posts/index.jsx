@@ -4,10 +4,12 @@ import { Card } from '@/components/Card'
 import { SimpleLayout } from '@/components/SimpleLayout'
 import { formatDate } from '@/lib/formatDate'
 import { getPosts, getPost } from "@/api/postsApi"
+import Link from 'next/link'
+import { useUser } from '@auth0/nextjs-auth0/client'
 
 function Post({ post }) {
   const date = new Date(post.createdDate)
-
+ 
   return (
     <article className="md:grid md:grid-cols-4 md:items-baseline">
       <Card className="md:col-span-3">
@@ -50,8 +52,16 @@ export default function PostsIndex({ posts }) {
         title="Writing on software design, company building, and the aerospace industry."
         intro="All of my long-form thoughts on programming, leadership, product design, and more, collected in chronological order."
       >
+         <Link
+                  href="/posts/newPost"
+                  className="mb-8 inline-block rounded bg-blue-600 px-5 py-2 text-white hover:bg-blue-700"
+                >
+                  Create New Post
+                </Link>
+       
         <div className="md:border-l md:border-zinc-100 md:pl-6">
-          <div className="flex max-w-3xl flex-col space-y-16">
+          <div className="flex max-w-3xl flex-col space-y-16">           
+          
             {posts.map((post) => (
               <Post key={post.slug} post={post} />
             ))}
