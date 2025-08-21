@@ -21,3 +21,13 @@ export const getPost = (postSlug) => {
     return {}
   }
 }
+
+export const createPost = async (postData) => {
+  try {
+    const res = await API.post('/posts/', postData)
+    return res.data
+  } catch (e) {
+    console.error('Failed to create post:', e)
+    throw e
+  }
+}
