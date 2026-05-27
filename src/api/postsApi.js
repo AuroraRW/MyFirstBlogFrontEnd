@@ -21,3 +21,8 @@ export const getPost = (postSlug) => {
     return {}
   }
 }
+
+export const createPost = ({ title, description }) => {
+  return API.post('/posts/', { title, description })
+    .then((res) => res.data)
+}
